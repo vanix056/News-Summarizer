@@ -13,9 +13,11 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Enhanced CSS with animations
+# Enhanced CSS with animations and icons
 st.markdown("""
     <style>
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -72,7 +74,8 @@ st.markdown("""
         }
         
         .social-button {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
             padding: 12px 25px;
             margin: 10px;
             border-radius: 25px;
@@ -80,6 +83,24 @@ st.markdown("""
             text-decoration: none !important;
             transition: all 0.3s ease;
             transform-origin: center;
+            gap: 10px;
+        }
+
+        .social-button i {
+            font-size: 1.2em;
+        }
+
+        .social-button span {
+            display: inline-block;
+        }
+
+        @media (max-width: 480px) {
+            .social-button span {
+                display: none;
+            }
+            .social-button {
+                padding: 12px 15px;
+            }
         }
         
         .linkedin {
@@ -106,15 +127,6 @@ st.markdown('<div class="fade-in">', unsafe_allow_html=True)
 st.title("📰 News Analytics Pro")
 st.markdown("---")
 st.markdown('</div>', unsafe_allow_html=True)
-
-# Social buttons in sidebar
-with st.sidebar:
-    st.markdown("""
-        <div style="text-align: center; margin-top: 50px;">
-            <a href="https://www.linkedin.com/in/yourprofile" target="_blank" class="social-button linkedin">LinkedIn</a>
-            <a href="https://github.com/yourprofile" target="_blank" class="social-button github">GitHub</a>
-        </div>
-    """, unsafe_allow_html=True)
 
 # URL input
 url = st.text_input(
@@ -194,14 +206,20 @@ if st.button("Analyze Article"):
             except Exception as e:
                 st.error(f"❌ Error: {str(e)}")
 
-# Footer with social links
+# Footer with social links and logos
 st.markdown("---")
 st.markdown("""
     <div style="text-align: center; padding: 20px;">
         <h3>Connect with Me</h3>
-        <a href="https://www.linkedin.com/in/yourprofile" target="_blank" class="social-button linkedin">LinkedIn</a>
-        <a href="https://github.com/yourprofile" target="_blank" class="social-button github">GitHub</a>
+        <a href="https://www.linkedin.com/in/abdullahwaqar/" target="_blank" class="social-button linkedin">
+            <i class="fab fa-linkedin"></i>
+            <span>LinkedIn</span>
+        </a>
+        <a href="https://github.com/vanix056" target="_blank" class="social-button github">
+            <i class="fab fa-github"></i>
+            <span>GitHub</span>
+        </a>
     </div>
 """, unsafe_allow_html=True)
 
-st.caption("Powered by Streamlit, Newspaper3k, and TextBlob | Developed with ❤️ by [Your Name]")
+st.caption("Developed by vanix056")
