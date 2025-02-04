@@ -1,96 +1,207 @@
-import nltk
-from textblob import TextBlob
-import tkinter as t
+import streamlit as st
 from newspaper import Article
+from textblob import TextBlob
+import nltk
 
+nltk.download('punkt')
 
-def summarize():
-    url = utext.get('1.0', 'end').strip()
-    article = Article(url)
-    article.download()
-    article.parse()
-    article.nlp()
+# Set page config
+st.set_page_config(
+    page_title="News Summarizer",
+    page_icon="📰",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-    title.config(state='normal')
-    author.config(state='normal')
-    publication.config(state='normal')
-    summary.config(state='normal')
-    sentiment.config(state='normal')
+# Enhanced CSS with animations
+st.markdown("""
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes buttonHover {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .reportview-container {
+            background: #f0f2f6;
+        }
+        
+        .header {
+            color: #2c3e50;
+        }
+        
+        .stTextInput>div>div>input {
+            border: 2px solid #4a90e2;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .stButton>button {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 28px;
+            font-weight: bold;
+            transition: all 0.3s ease !important;
+        }
+        
+        .stButton>button:hover {
+            background-color: #357abd;
+            animation: buttonHover 0.5s ease;
+        }
+        
+        .metric-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 10px 0;
+            animation: fadeIn 0.6s ease-out;
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-box:hover {
+            transform: translateY(-5px);
+        }
+        
+        .social-button {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px;
+            border-radius: 25px;
+            color: white !important;
+            text-decoration: none !important;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        
+        .linkedin {
+            background: #0A66C2;
+        }
+        
+        .github {
+            background: #333;
+        }
+        
+        .social-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
-    title.delete('1.0', 'end')
-    title.insert('1.0', article.title if article.title else "No Title Available")
+# App header with animation
+st.markdown('<div class="fade-in">', unsafe_allow_html=True)
+st.title("📰 News Analytics Pro")
+st.markdown("---")
+st.markdown('</div>', unsafe_allow_html=True)
 
-    author.delete('1.0', 'end')
-    author.insert('1.0', ", ".join(article.authors) if article.authors else "No Authors Available")
+# Social buttons in sidebar
+with st.sidebar:
+    st.markdown("""
+        <div style="text-align: center; margin-top: 50px;">
+            <a href="https://www.linkedin.com/in/yourprofile" target="_blank" class="social-button linkedin">LinkedIn</a>
+            <a href="https://github.com/yourprofile" target="_blank" class="social-button github">GitHub</a>
+        </div>
+    """, unsafe_allow_html=True)
 
-    publication.delete('1.0', 'end')
-    publication.insert('1.0', str(article.publish_date) if article.publish_date else "No Date Available")
+# URL input
+url = st.text_input(
+    "Enter News Article URL:",
+    placeholder="Paste article URL here...",
+    key="url_input"
+)
 
-    summary.delete('1.0', 'end')
-    summary.insert('1.0', article.summary if article.summary else "No Summary Available")
+if st.button("Analyze Article"):
+    if not url:
+        st.warning("Please enter a valid URL.")
+    else:
+        with st.spinner("📥 Downloading and analyzing article..."):
+            try:
+                article = Article(url)
+                article.download()
+                article.parse()
+                article.nlp()
 
-    analysis = TextBlob(article.text)
-    sentiment.delete('1.0', 'end')
-    sentiment.insert(
-        '1.0',
-        f'Polarity: {analysis.polarity}, Sentiment: '
-        f'{"Positive" if analysis.polarity > 0 else "Negative" if analysis.polarity < 0 else "Neutral"}'
-    )
+                # Display results with animations
+                col1, col2 = st.columns([3, 1])
+                
+                with col1:
+                    st.markdown('<div class="fade-in">', unsafe_allow_html=True)
+                    st.subheader("📝 Article Content")
+                    with st.expander("View Full Text", expanded=False):
+                        st.write(article.text)
+                    
+                    st.subheader("📌 Key Summary")
+                    st.info(article.summary if article.summary else "No summary available.")
+                    st.markdown('</div>', unsafe_allow_html=True)
 
-    title.config(state='disabled')
-    author.config(state='disabled')
-    publication.config(state='disabled')
-    summary.config(state='disabled')
-    sentiment.config(state='disabled')
-    
-    
-gui=t.Tk()
-gui.title('News Summary Report')
-gui.geometry('1200x600')
-tlabel=t.Label(gui,text='Title')
-tlabel.pack()
-title=t.Text(gui,height=1,width=140)
-title.config(state='disabled',bg='#dddddd')
-title.pack()
+                with col2:
+                    st.markdown('<div class="fade-in">', unsafe_allow_html=True)
+                    st.subheader("🔍 Metadata")
+                    
+                    # Article metrics
+                    st.markdown('<div class="metric-box">', unsafe_allow_html=True)
+                    st.markdown("**📛 Title**")
+                    st.write(article.title or "No title available")
+                    st.markdown('</div>', unsafe_allow_html=True)
+                    
+                    st.markdown('<div class="metric-box">', unsafe_allow_html=True)
+                    st.markdown("**👤 Authors**")
+                    if article.authors:
+                        st.write("\n".join([f"- {author}" for author in article.authors]))
+                    else:
+                        st.write("No authors available")
+                    st.markdown('</div>', unsafe_allow_html=True)
+                    
+                    st.markdown('<div class="metric-box">', unsafe_allow_html=True)
+                    st.markdown("**📅 Publication Date**")
+                    st.write(article.publish_date.strftime("%B %d, %Y") if article.publish_date else "Date unavailable")
+                    st.markdown('</div>', unsafe_allow_html=True)
 
-alabel=t.Label(gui,text='Author')
-alabel.pack()
-author=t.Text(gui,height=1,width=140)
-author.config(state='disabled', bg='#dddddd')
-author.pack()
+                    # Sentiment analysis
+                    analysis = TextBlob(article.text)
+                    polarity = analysis.polarity
+                    sentiment_class = ""
+                    if polarity > 0:
+                        sentiment_class = "sentiment-positive"
+                        emoji = "😊"
+                    elif polarity < 0:
+                        sentiment_class = "sentiment-negative"
+                        emoji = "😠"
+                    else:
+                        sentiment_class = "sentiment-neutral"
+                        emoji = "😐"
 
-plabel=t.Label(gui,text='Publication Date')
-plabel.pack()
-publication=t.Text(gui,height=1,width=140)
-publication.config(state='disabled', bg='#dddddd')
-publication.pack()
+                    st.markdown(f'<div class="metric-box {sentiment_class}">', unsafe_allow_html=True)
+                    st.markdown("**🧠 Sentiment Analysis**")
+                    st.metric("Polarity", f"{polarity:.2f}")
+                    st.markdown(f"**Sentiment:** {emoji}")
+                    st.markdown('</div>', unsafe_allow_html=True)
+                    st.markdown('</div>', unsafe_allow_html=True)
 
-slabel=t.Label(gui,text='Summary')
-slabel.pack()
-summary=t.Text(gui,height=20,width=140)
-summary.config(state='disabled', bg='#dddddd')
-summary.pack()
+            except Exception as e:
+                st.error(f"❌ Error: {str(e)}")
 
-elabel=t.Label(gui,text='Sentiment Analysis')
-elabel.pack()
-sentiment=t.Text(gui,height=1,width=140)
-sentiment.config(state='disabled', bg='#dddddd')
-sentiment.pack()
+# Footer with social links
+st.markdown("---")
+st.markdown("""
+    <div style="text-align: center; padding: 20px;">
+        <h3>Connect with Me</h3>
+        <a href="https://www.linkedin.com/in/yourprofile" target="_blank" class="social-button linkedin">LinkedIn</a>
+        <a href="https://github.com/yourprofile" target="_blank" class="social-button github">GitHub</a>
+    </div>
+""", unsafe_allow_html=True)
 
-ulabel=t.Label(gui,text='Enter URL')
-ulabel.pack()
-
-utext=t.Text(gui,height=1,width=140)
-utext.pack()
-
-bbutton=t.Button(gui,text='Summarize',command=summarize)
-bbutton.pack()
-
-gui.mainloop()
-
-
-    
-    
-    
-
-
+st.caption("Powered by Streamlit, Newspaper3k, and TextBlob | Developed with ❤️ by [Your Name]")
