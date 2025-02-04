@@ -7,7 +7,7 @@ nltk.download('punkt')
 
 # Set page config
 st.set_page_config(
-    page_title="News Summarizer",
+    page_title="News Analytics Pro",
     page_icon="📰",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -182,7 +182,7 @@ if st.button("Analyze Article"):
                     st.write(article.publish_date.strftime("%B %d, %Y") if article.publish_date else "Date unavailable")
                     st.markdown('</div>', unsafe_allow_html=True)
 
-                    # Sentiment analysis
+                    # Sentiment 
                     analysis = TextBlob(article.text)
                     polarity = analysis.polarity
                     sentiment_class = ""
