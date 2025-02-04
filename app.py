@@ -1,37 +1,42 @@
 import nltk
 from textblob import TextBlob
 import tkinter as t
-from newspaper import article
+from newspaper import Article
 
 
 def summarize():
-    url=utext.get('1.0','end').strip()
-    article=Article(url)
+    url = utext.get('1.0', 'end').strip()
+    article = Article(url)
     article.download()
     article.parse()
     article.nlp()
+
     title.config(state='normal')
     author.config(state='normal')
     publication.config(state='normal')
     summary.config(state='normal')
     sentiment.config(state='normal')
-    
-    title.delete('1.0','end')
-    title.insert('1.0',article.title)
-    
-    author.delete('1.0','end')
-    author.insert('1.0',article.authors)
-    
-    publication.delete('1.0','end')
-    publication.insert('1.0',article.publish_date)
-    
-    summary.delete('1.0','end')
-    summary.insert('1.0',article.summary)
-    
-    analysis=TextBlob(article.text)
-    sentiment.delete('1.0','end')
-    sentiment.insert('1.0',f'Polarity: {analysis.polarity}, Sentiment: {"Positive" if analysis.polarity > 0 else "Negative" if analysis.polarity < 0 else "Neutral"}')
-    
+
+    title.delete('1.0', 'end')
+    title.insert('1.0', article.title if article.title else "No Title Available")
+
+    author.delete('1.0', 'end')
+    author.insert('1.0', ", ".join(article.authors) if article.authors else "No Authors Available")
+
+    publication.delete('1.0', 'end')
+    publication.insert('1.0', str(article.publish_date) if article.publish_date else "No Date Available")
+
+    summary.delete('1.0', 'end')
+    summary.insert('1.0', article.summary if article.summary else "No Summary Available")
+
+    analysis = TextBlob(article.text)
+    sentiment.delete('1.0', 'end')
+    sentiment.insert(
+        '1.0',
+        f'Polarity: {analysis.polarity}, Sentiment: '
+        f'{"Positive" if analysis.polarity > 0 else "Negative" if analysis.polarity < 0 else "Neutral"}'
+    )
+
     title.config(state='disabled')
     author.config(state='disabled')
     publication.config(state='disabled')
@@ -39,7 +44,7 @@ def summarize():
     sentiment.config(state='disabled')
     
     
-gui=t.TK()
+gui=t.Tk()
 gui.title('News Summary Report')
 gui.geometry('1200x600')
 tlabel=t.Label(gui,text='Title')
