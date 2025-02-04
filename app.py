@@ -205,7 +205,7 @@ if st.button("Analyze Article"):
 
                     st.markdown(f'<div class="metric-box {sentiment_class}">', unsafe_allow_html=True)
                     st.markdown("**🧠 Sentiment Analysis**")
-                    st.metric("Polarity", f"{polarity:.2f}")
+                    #st.metric("Polarity", f"{polarity:.2f}")
                     st.markdown(f"**Sentiment:** {emoji}")
                     st.markdown('</div>', unsafe_allow_html=True)
                     st.markdown('</div>', unsafe_allow_html=True)
