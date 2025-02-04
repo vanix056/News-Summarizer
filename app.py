@@ -41,6 +41,48 @@ def summarize():
     
 gui=t.TK()
 gui.title('News Summary Report')
+gui.geometry('1200x600')
+tlabel=t.Label(gui,text='Title')
+tlabel.pack()
+title=t.Text(gui,height=1,width=140)
+title.config(state='disabled',bg='#dddddd')
+title.pack()
+
+alabel=t.Label(gui,text='Author')
+alabel.pack()
+author=t.Text(gui,height=1,width=140)
+author.config(state='disabled', bg='#dddddd')
+author.pack()
+
+plabel=t.Label(gui,text='Publication Date')
+plabel.pack()
+publication=t.Text(gui,height=1,width=140)
+publication.config(state='disabled', bg='#dddddd')
+publication.pack()
+
+slabel=t.Label(gui,text='Summary')
+slabel.pack()
+summary=t.Text(gui,height=20,width=140)
+summary.config(state='disabled', bg='#dddddd')
+summary.pack()
+
+elabel=t.Label(gui,text='Sentiment Analysis')
+elabel.pack()
+sentiment=t.Text(gui,height=1,width=140)
+sentiment.config(state='disabled', bg='#dddddd')
+sentiment.pack()
+
+ulabel=t.Label(gui,text='Enter URL')
+ulabel.pack()
+
+utext=t.Text(gui,height=1,width=140)
+utext.pack()
+
+bbutton=t.Button(gui,text='Summarize',command=summarize)
+bbutton.pack()
+
+gui.mainloop()
+
 
     
     
