@@ -2,14 +2,13 @@ import streamlit as st
 from newspaper import Article
 from textblob import TextBlob
 import nltk
-import nltk
-import os
 
-nltk_data_dir = os.path.expanduser("~/.nltk_data")
-nltk.data.path.append(nltk_data_dir)
+# NLTK Setup for Streamlit Cloud
+nltk.download('punkt', download_dir='/home/appuser/nltk_data')
+nltk.download('punkt_tab', download_dir='/home/appuser/nltk_data')
+nltk.data.path.append('/home/appuser/nltk_data')
 
-if not os.path.exists(nltk_data_dir + "/tokenizers/punkt"):
-    nltk.download('punkt', download_dir=nltk_data_dir)
+# Rest of your code...
 
 
 
