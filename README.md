@@ -1,4 +1,4 @@
-# 📰 News Analytics Pro
+# News Analytics Pro
 
 ## Overview
 
@@ -34,7 +34,7 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/vanix056/News-Summarizer.git
+git clone https://github.com/MAbdullahWaqar/News-Summarizer.git
 cd News-Summarizer
 
 # 2. Install dependencies
@@ -125,7 +125,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Author
 
-**Abdullah Waqar**
+**Muhammad Abdullah Waqar**
 
-- GitHub: [@vanix056](https://github.com/vanix056)
+- GitHub: [@MAbdullahWaqar](https://github.com/MAbdullahWaqar)
 - LinkedIn: [abdullahwaqar](https://www.linkedin.com/in/abdullahwaqar/)
